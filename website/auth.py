@@ -21,7 +21,7 @@ def login():
                 flash('Incorrect password X_X', category='error')
         else:
             flash('Email does not exist', category='error')
-    return render_template("login.html", boolean=True)
+    return render_template("login.html", user=current_user)
 
 @auth.route('/logout')
 @login_required
@@ -54,7 +54,7 @@ def signup():
             new_user = User(email=email, first_name=fname, password=generate_password_hash(password1, method='scrypt'))
             db.session.add(new_user)
             db.session.commit()
-            login_user(user, remember=True)
+            login_user(new_user, remember=True)
             flash('Account created!', category='success')
             return redirect(url_for('views.home'))
-    return render_template("signup.html")
+    return render_template("signup.html", user=current_user)

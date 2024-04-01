@@ -2,7 +2,7 @@ from flask import Flask
 import os
 from flask_sqlalchemy import SQLAlchemy
 from os import path
-from flask_login import LoginManager
+from flask_login import LoginManager, current_user
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
@@ -30,6 +30,9 @@ def create_app():
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
+    @app.context_processor
+    def inject_user():
+        return dict(user=current_user)
 
     return app
 
